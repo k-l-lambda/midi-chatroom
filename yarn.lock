@@ -164,6 +164,11 @@
   resolved "https://registry.yarnpkg.com/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.5.0.tgz#3188bcb273a414b0d215fd22a58540b989b9409a"
   integrity sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==
 
+"@k-l-lambda/music-widgets@0.3.36":
+  version "0.3.36"
+  resolved "https://registry.yarnpkg.com/@k-l-lambda/music-widgets/-/music-widgets-0.3.36.tgz#2b3e072b5e2f73678c7b26741ff9e87429d41340"
+  integrity sha512-g4F60+pHvggDn2MP0oykcLEU3x1jPdPCPhACX2lxp4yZyq6wk3mcdlUVm0W/Qu23hMJO2OPBcfGAUmHMiDkWZg==
+
 "@rollup/rollup-android-arm-eabi@4.30.1":
   version "4.30.1"
   resolved "https://registry.yarnpkg.com/@rollup/rollup-android-arm-eabi/-/rollup-android-arm-eabi-4.30.1.tgz#14c737dc19603a096568044eadaa60395eefb809"

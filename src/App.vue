@@ -18,34 +18,8 @@
 			</div>
 
 			<div v-else class="chat-container">
-				<div class="devices-panel">
-					<div class="device-section">
-						<h3>MIDI Input</h3>
-						<select v-model="selectedInputId">
-							<option value="">Select input device...</option>
-							<option 
-								v-for="input in midiStore.availableInputs" 
-								:key="input.id" 
-								:value="input.id"
-							>
-								{{ input.name }}
-							</option>
-						</select>
-					</div>
-
-					<div class="device-section">
-						<h3>MIDI Output</h3>
-						<select v-model="selectedOutputId">
-							<option value="">Select output device...</option>
-							<option 
-								v-for="output in midiStore.availableOutputs" 
-								:key="output.id" 
-								:value="output.id"
-							>
-								{{ output.name }}
-							</option>
-						</select>
-					</div>
+				<div class="piano-panel">
+					<PianoKeyboard @midi-message="onMidiMessage" />
 				</div>
 
 				<div class="users-panel">
@@ -64,7 +38,7 @@
 		</main>
 
 		<footer>
-			<p>Status: {{ midiStore.isConnected ? 'Connected' : 'Disconnected' }}</p>
+			<p>Status: {{ midiStore.isConnected ? 'Connected' : 'Disconnected' }} | Audio: {{ midiAudioLoaded ? 'Ready' : 'Loading...' }}</p>
 		</footer>
 	</div>
 </template>
@@ -72,27 +46,56 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { useMidiStore } from './stores/midi';
+import { MidiAudio } from '@k-l-lambda/music-widgets';
+import PianoKeyboard from './components/PianoKeyboard.vue';
 
 const midiStore = useMidiStore();
 const tempUsername = ref('');
-const selectedInputId = ref('');
-const selectedOutputId = ref('');
+const midiAudioLoaded = ref(false);
 
 onMounted(async () => {
 	await midiStore.initialize();
-});
-
-watch(selectedInputId, (newId) => {
-	if (newId) {
-		midiStore.selectInput(newId);
+	
+	// Initialize MidiAudio
+	if (MidiAudio.WebAudio.empty()) {
+		await MidiAudio.loadPlugin({
+			soundfontUrl: '/soundfont/',
+			api: 'webaudio'
+		});
+		midiAudioLoaded.value = true;
+	} else {
+		midiAudioLoaded.value = true;
 	}
 });
 
-watch(selectedOutputId, (newId) => {
-	if (newId) {
-		midiStore.selectOutput(newId);
+const onMidiMessage = (message: any) => {
+	// Send to other users
+	if (midiStore.socket) {
+		midiStore.socket.emit('midi:message', {
+			message: message.data,
+			timestamp: message.timestamp
+		});
 	}
-});
+};
+
+// Handle incoming MIDI messages from other users
+watch(() => midiStore.socket, (socket) => {
+	if (socket) {
+		socket.on('midi:message', (data) => {
+			if (midiAudioLoaded.value) {
+				const [status, note, velocity] = data.message;
+				const channel = status & 0xf;
+				const type = status >> 4;
+				
+				if (type === 9 && velocity > 0) { // Note On
+					MidiAudio.noteOn(channel, note, velocity);
+				} else if (type === 8 || (type === 9 && velocity === 0)) { // Note Off
+					MidiAudio.noteOff(channel, note);
+				}
+			}
+		});
+	}
+}, { immediate: true });
 
 const joinRoom = () => {
 	if (tempUsername.value.trim()) {
@@ -101,7 +104,7 @@ const joinRoom = () => {
 };
 
 const isUserActive = (user: { lastActive: number }) => {
-	return Date.now() - user.lastActive < 5000; // Consider active if action within last 5 seconds
+	return Date.now() - user.lastActive < 5000;
 };
 </script>
 
@@ -166,28 +169,11 @@ button:hover {
 	margin-top: 2rem;
 }
 
-.devices-panel {
+.piano-panel {
 	background-color: #f8f9fa;
 	padding: 1.5rem;
 	border-radius: 8px;
 	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.device-section {
-	margin-bottom: 1.5rem;
-}
-
-.device-section h3 {
-	margin-bottom: 0.5rem;
-	color: #2c3e50;
-}
-
-select {
-	width: 100%;
-	padding: 0.5rem;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	font-size: 1rem;
 }
 
 .users-panel {
@@ -206,6 +192,9 @@ select {
 .users-list li {
 	padding: 0.5rem;
 	border-bottom: 1px solid #ddd;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .users-list li:last-child {

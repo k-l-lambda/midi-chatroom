@@ -15,7 +15,8 @@
     "socket.io-client": "^4.7.4",
     "express": "^4.18.2",
     "webmidi": "^3.1.8",
-    "pinia": "^2.1.7"
+    "pinia": "^2.1.7",
+    "@k-l-lambda/music-widgets": "0.3.36"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
