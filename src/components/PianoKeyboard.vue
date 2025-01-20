@@ -88,6 +88,7 @@ const stopNote = (midiNote: number) => {
   padding: 20px;
   background: #f5f5f5;
   border-radius: 8px;
+  box-sizing: border-box; /* Ensures padding is included in the total size */
 }
 
 .piano {
@@ -106,6 +107,7 @@ const stopNote = (midiNote: number) => {
   border: 1px solid #ccc;
   cursor: pointer;
   user-select: none;
+  box-sizing: border-box;
 }
 
 .white {
@@ -129,7 +131,7 @@ const stopNote = (midiNote: number) => {
 }
 
 .black.active {
-  background: #35495e;
+  background: #557596;
 }
 
 .note-label {

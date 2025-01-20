@@ -181,6 +181,7 @@ button:hover {
 	padding: 1.5rem;
 	border-radius: 8px;
 	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	color: #333;
 }
 
 .users-list {
@@ -195,6 +196,7 @@ button:hover {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	color: #333;
 }
 
 .users-list li:last-child {
