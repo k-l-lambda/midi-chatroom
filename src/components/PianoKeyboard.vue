@@ -7,7 +7,9 @@
         :class="['key', note.type, { active: activeNotes.includes(note.midiNote) }]"
         @mousedown="playNote(note.midiNote)"
         @mouseup="stopNote(note.midiNote)"
-        @mouseleave="stopNote(note.midiNote)"
+        @mouseleave="handleMouseLeave(note.midiNote)"
+        @mouseenter="handleMouseEnter(note.midiNote)"
+        @mousemove="handleMouseMove(note.midiNote)"
       >
         <span class="note-label">{{ note.label }}</span>
       </div>
@@ -20,6 +22,7 @@ import { ref } from 'vue';
 import { MidiAudio } from '@k-l-lambda/music-widgets';
 
 const activeNotes = ref<number[]>([]);
+const mouseIsDown = ref(false);
 
 // Define piano notes (2 octaves from C4 to B5)
 const notes = [
@@ -80,6 +83,30 @@ const stopNote = (midiNote: number) => {
     timestamp: performance.now()
   });
 };
+
+const handleMouseEnter = (midiNote: number) => {
+  // Check if the left mouse button (button 0) is pressed
+  if (mouseIsDown.value) {
+    playNote(midiNote);
+  }
+};
+
+const handleMouseLeave = (midiNote: number) => {
+  stopNote(midiNote);
+};
+
+const handleMouseMove = (midiNote: number) => {
+  //if (activeNotes.value.includes(midiNote)) return;
+  //playNote(midiNote);
+};
+
+window.addEventListener('mousedown', () => {
+  mouseIsDown.value = true;
+});
+
+window.addEventListener('mouseup', () => {
+  mouseIsDown.value = false;
+});
 </script>
 
 <style scoped>
