@@ -53,6 +53,30 @@ const midiStore = useMidiStore();
 const tempUsername = ref('');
 const midiAudioLoaded = ref(false);
 
+// Function to generate a random username
+const generateRandomUsername = () => {
+    const randomNames = [
+        'James', 'Olivia', 'William', 'Sophia',
+        'Benjamin', 'Isabella', 'Lucas', 'Mia',
+        'Henry', 'Charlotte', 'Alexander', 'Amelia',
+        'Ethan', 'Harper', 'Daniel', 'Evelyn',
+        'Matthew', 'Abigail', 'Samuel', 'Ella',
+        'Michael', 'Grace', 'David', 'Lily',
+        'Joseph', 'Scarlett', 'Andrew', 'Aria',
+        'Christopher', 'Chloe', 'Nathan', 'Zoey'
+    ];
+    return randomNames[Math.floor(Math.random() * randomNames.length)];
+};
+
+// Check localStorage for a cached username
+const cachedUsername = localStorage.getItem('username');
+if (cachedUsername) {
+    tempUsername.value = cachedUsername;
+} else {
+    // Assign a random username if none is cached
+    tempUsername.value = generateRandomUsername();
+}
+
 onMounted(async () => {
 	await midiStore.initialize();
 	
@@ -66,7 +90,17 @@ onMounted(async () => {
 	} else {
 		midiAudioLoaded.value = true;
 	}
+
+	// Automatically join the room with the generated or cached username
+	joinRoom();
 });
+
+const joinRoom = () => {
+	if (tempUsername.value.trim()) {
+		midiStore.setUsername(tempUsername.value.trim());
+		localStorage.setItem('username', tempUsername.value.trim()); // Store username in localStorage
+	}
+};
 
 const onMidiMessage = (message: any) => {
 	// Send to other users
@@ -96,12 +130,6 @@ watch(() => midiStore.socket, (socket) => {
 		});
 	}
 }, { immediate: true });
-
-const joinRoom = () => {
-	if (tempUsername.value.trim()) {
-		midiStore.setUsername(tempUsername.value.trim());
-	}
-};
 
 const isUserActive = (user: { lastActive: number }) => {
 	return Date.now() - user.lastActive < 5000;
