@@ -1,24 +1,26 @@
 {
-  "name": "myapp",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "start": "ts-node server.ts",
-    "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "vue": "^3.5.13",
-    "typescript": "^5.3.3",
-    "ws": "^8.16.0"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.1",
-    "@vue/tsconfig": "^0.7.0",
-    "ts-node": "^10.9.2",
-    "vite": "^6.1.0",
-    "vue-tsc": "^2.2.0"
-  }
+	"name": "myapp",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"format": "prettier --write \"**/*.{ts,html,json}\"",
+		"start": "ts-node server.ts",
+		"build": "vue-tsc -b && vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"vue": "^3.5.13",
+		"typescript": "^5.3.3",
+		"ws": "^8.16.0"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^5.2.1",
+		"@vue/tsconfig": "^0.7.0",
+		"ts-node": "^10.9.2",
+		"prettier": "^3.2.5",
+		"vite": "^6.1.0",
+		"vue-tsc": "^2.2.0"
+	}
 }
