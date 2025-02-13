@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebSocket Chat</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    #chat-container {
+      width: 500px;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+      padding: 20px;
+    }
+    #message-list {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+      height: 300px;
+      overflow-y: scroll;
+    }
+    #message-list li {
+      margin-bottom: 5px;
+      padding: 5px;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-container">
+    <h1>WebSocket Chat</h1>
+    <ul id="message-list"></ul>
+    <div>
+      <input type="text" id="message-input" placeholder="Type your message here" />
+      <button id="send-button">Send</button>
+    </div>
+  </div>
+  <script>
+    const socket = new WebSocket('ws://localhost:8080');
+    const messageList = document.getElementById('message-list');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    
+  </script>
+</body>
+</html>
