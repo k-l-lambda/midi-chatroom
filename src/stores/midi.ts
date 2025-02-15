@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia';
-import { WebMidi } from 'webmidi';
-import { io, Socket } from 'socket.io-client';
+import { defineStore } from "pinia";
+import { WebMidi } from "webmidi";
+import { io, Socket } from "socket.io-client";
 
 interface MidiState {
 	isConnected: boolean;
@@ -13,16 +13,16 @@ interface MidiState {
 	socket: Socket | null;
 }
 
-export const useMidiStore = defineStore('midi', {
+export const useMidiStore = defineStore("midi", {
 	state: (): MidiState => ({
 		isConnected: false,
-		username: '',
+		username: "",
 		connectedUsers: [],
 		selectedInput: null,
 		selectedOutput: null,
 		availableInputs: [],
 		availableOutputs: [],
-		socket: null
+		socket: null,
 	}),
 
 	actions: {
@@ -31,38 +31,42 @@ export const useMidiStore = defineStore('midi', {
 				await WebMidi.enable();
 				this.isConnected = true;
 				this.updateDeviceLists();
-				
+
 				// Setup WebSocket connection
-				this.socket = io('http://localhost:3000');
+				this.socket = io("http://localhost:3000");
 				this.setupSocketListeners();
-				
+
 				// Listen for device changes
-				WebMidi.addListener("connected", () => this.updateDeviceLists());
-				WebMidi.addListener("disconnected", () => this.updateDeviceLists());
+				WebMidi.addListener("connected", () =>
+					this.updateDeviceLists(),
+				);
+				WebMidi.addListener("disconnected", () =>
+					this.updateDeviceLists(),
+				);
 			} catch (err) {
-				console.error('Failed to initialize WebMidi:', err);
+				console.error("Failed to initialize WebMidi:", err);
 			}
 		},
 
 		updateDeviceLists() {
-			this.availableInputs = WebMidi.inputs.map(input => ({
+			this.availableInputs = WebMidi.inputs.map((input) => ({
 				id: input.id,
-				name: input.name
+				name: input.name,
 			}));
-			this.availableOutputs = WebMidi.outputs.map(output => ({
+			this.availableOutputs = WebMidi.outputs.map((output) => ({
 				id: output.id,
-				name: output.name
+				name: output.name,
 			}));
 		},
 
 		setupSocketListeners() {
 			if (!this.socket) return;
 
-			this.socket.on('users:update', (users) => {
+			this.socket.on("users:update", (users) => {
 				this.connectedUsers = users;
 			});
 
-			this.socket.on('midi:message', (data) => {
+			this.socket.on("midi:message", (data) => {
 				if (this.selectedOutput && WebMidi.isEnabled) {
 					const output = WebMidi.getOutputById(this.selectedOutput);
 					if (output) {
@@ -74,7 +78,7 @@ export const useMidiStore = defineStore('midi', {
 
 		setUsername(username: string) {
 			this.username = username;
-			this.socket?.emit('user:join', username);
+			this.socket?.emit("user:join", username);
 		},
 
 		selectInput(inputId: string) {
@@ -85,12 +89,12 @@ export const useMidiStore = defineStore('midi', {
 
 			this.selectedInput = inputId;
 			const input = WebMidi.getInputById(inputId);
-			
+
 			if (input && this.socket) {
-				input.addListener('midimessage', (e) => {
-					this.socket?.emit('midi:message', {
+				input.addListener("midimessage", (e) => {
+					this.socket?.emit("midi:message", {
 						message: e.message,
-						timestamp: e.timestamp
+						timestamp: e.timestamp,
 					});
 				});
 			}
@@ -98,6 +102,6 @@ export const useMidiStore = defineStore('midi', {
 
 		selectOutput(outputId: string) {
 			this.selectedOutput = outputId;
-		}
-	}
+		},
+	},
 });

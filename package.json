@@ -1,31 +1,31 @@
 {
-  "name": "midi-chatroom",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc -b && vite build",
-	"format": "prettier --write \"**/*.{ts,html,json}\"",
-    "preview": "vite preview",
-    "serve": "node server/index.js"
-  },
-  "dependencies": {
-    "vue": "^3.5.13",
-    "socket.io": "^4.7.4",
-    "socket.io-client": "^4.7.4",
-    "express": "^4.18.2",
-    "webmidi": "^3.1.8",
-    "pinia": "^2.1.7",
-    "@k-l-lambda/music-widgets": "0.3.36"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.1",
-    "@vue/tsconfig": "^0.7.0",
-	"prettier": "^3.2.5",
-    "typescript": "~5.6.2",
-    "vite": "^6.0.5",
-    "vue-tsc": "^2.2.0",
-    "@types/node": "^20.11.5"
-  }
+	"name": "midi-chatroom",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vue-tsc -b && vite build",
+		"format": "prettier --write \"**/*.{ts,html,json}\"",
+		"preview": "vite preview",
+		"serve": "node server/index.js"
+	},
+	"dependencies": {
+		"vue": "^3.5.13",
+		"socket.io": "^4.7.4",
+		"socket.io-client": "^4.7.4",
+		"express": "^4.18.2",
+		"webmidi": "^3.1.8",
+		"pinia": "^2.1.7",
+		"@k-l-lambda/music-widgets": "0.3.36"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^5.2.1",
+		"@vue/tsconfig": "^0.7.0",
+		"prettier": "^3.2.5",
+		"typescript": "~5.6.2",
+		"vite": "^6.0.5",
+		"vue-tsc": "^2.2.0",
+		"@types/node": "^20.11.5"
+	}
 }
