@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+	"format": "prettier --write \"**/*.{ts,html,json}\"",
     "preview": "vite preview",
     "serve": "node server/index.js"
   },
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
+	"prettier": "^3.2.5",
     "typescript": "~5.6.2",
     "vite": "^6.0.5",
     "vue-tsc": "^2.2.0",
